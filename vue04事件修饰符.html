@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>事件的修饰符</title>
+        <script src="vue.js"></script>
+        <style>
+        
+            .inner{
+                width: 150px;
+                height: 150px;
+                background-color: aqua;
+            }
+        
+        </style>
+    </head>
+    <body>
+        <div class="app">
+
+            <div class="inner" @click.self='innerHandle'>
+                <!-- <input type="button" value="btn" @click.stop='btnHandle'> -->
+                <input type="button" value="btn" @click='btnHandle'>
+                <a href="https://www.baidu.com" @click.prevent.once>点击进入百度</a>
+                <!-- 还要知道一个很重要的事实：事件的修饰符是可以串联的，就像jquery那样可以链式操作 -->
+            </div>
+            <!-- 
+                .stop:可以阻止事件的冒泡，直接在事件后面添加.stop就可以了,例如：@click.stop
+                .prevent:可以阻止默认行为，直接在事件后面添加.prevent既可以了，例如：@click.prevent
+                .capture:可以执行事件的捕获，因为浏览器的是默认冒泡，因此要执行捕获行为，记得在最外层的事件添加.capture
+                .self:意思就是只有是自己主动触发的事件才会执行，如果是被动触发的事件不会执行
+                    1.当子元素的事件触发的时候，父元素的事件会因为事件冒泡的机制也会被动触发，但是有时候不想父元素的事件触发，
+                    这个时候.self就派上用场了，.self就是只有自己主动触发的事件才会执行，而被动触发的事件不会被执行
+                    2.对于1中的情况也可以使用.stop来实现，因为.stop就是阻止事件的冒泡，所以也会导致父元素的事件不会被触发
+                .once:事件只会触发一次,意思就是在事件后面添加.once之后就会导致这个是事件只会触发一次，当触发第二次的时候事件就不会再被执行了
+             -->
+             
+        </div>
+
+
+        <script>
+        
+            var vm = new Vue({
+                el:'.app',
+                data:{
+                    message:'hello world'
+                },
+                methods:{
+                    innerHandle(){
+                        console.log('触发了 innerHandle 事件');
+                    },
+                    btnHandle(){
+                        console.log('触发了 btnHandle 事件');
+                    }
+                    /* 可以看见，浏览器是默认触发冒泡的，但是有时候我们不需要冒泡的时候可以取消掉 */
+                }
+            });
+        
+        </script>
+    </body>
+</html>

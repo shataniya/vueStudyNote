@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>vue中使用样式</title>
+        <script src="vue.js"></script>
+        <style>
+        
+            .red{
+                color: red;
+            }
+            .thin{
+                font-weight: 100;
+            }
+            .italic{
+                font-style: italic;
+            }
+            .active{
+                background-color: aqua;
+            }
+
+        
+        </style>
+    </head>
+    <body>
+        <div class="app">
+            <!-- <h1 class="red thin">我是一个H1</h1> -->
+
+            <!-- <h1 :class="['red','thin','italic']">我是一个H1</h1> -->
+            <!-- 第一种方式：通过绑定 v-bind 来实现样式的修改 -->
+            <!-- 1.在使用vue中的v-bind做数据绑定一个class属性的时候，可以通过数组的形式来调用相关的类，但是要注意：
+                    1.类名要用单引号括起来写成字符串的形式
+                        因为如果不用单引号括起来的话，那么就会默认是去寻找vue里边定义的变量，一旦没有定义这个变量就会返回
+                        not defined从而报错
+                    2.多个类的类名之间要用逗号
+                        因为是数组，所以里面元素与元素之间要用逗号隔开
+
+                 2.在数组当中也可以使用三元表达式，即 表达式1？表达式2：表达式3，意思就是如果表达式1是true，那么就执行表达式2，否则就执行表达式3
+
+                 3.在数组里边还可以添加对象，这里要注意一个知识点，就是关于对象的属性有没有被激活的表达方式
+                    1.'属性名':属性值，如果属性值是true，那么属性名对应的属性就会被激活，如果属性值是false，那么属性名对应的属性就不会被激活
+                 
+                 4.在数组里直接使用对象也可以
+            -->
+            <!-- <h1 :class="['red','thin','italic',flag ? 'active':'']">我是一个H1</h1> -->
+
+            <!-- <h1 :class="['red','thin','italic',{'active':flag}]">我是一个H1</h1>-->
+
+            <h1 :class="classobj">我是一个H1</h1>
+
+            <!-- 第二种方式：通过绑定 style 属性来实现样式的修改 -->
+            <!-- 使用 v-bind 来绑定 style 属性来修改样式，可以利用对象的修改，但是要注意的是，对象里的属性名要加单引号以此来表明是字符串
+                 属性值也要用单引号括起来，表示成字符串才可以,多个属性之间要用逗号隔开
+             -->
+
+            <h1 :style="{'color':'green','font-size':'20px'}">我是另一个H1</h1>
+
+            <h2 :style="{'color':'pink'}">我是一个H2</h2>
+            
+        </div>
+
+
+        <script>
+        
+            var vm = new Vue({
+                el:'.app',
+                data:{
+                    message:'hello world',
+                    flag:false,
+                    classobj:{'red':true,'thin':true,'italic':false,'active':true}
+                },
+                methods:{
+                    
+                }
+            });
+        
+        </script>
+    </body>
+</html>

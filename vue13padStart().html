@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>padStart()的使用</title>
+        <script src="vue.js"></script>
+    </head>
+    <body>
+        <div class="app">
+            <p>{{ time | dataFormat() }}</p>
+        </div>
+
+
+        <script>
+        
+            var vm = new Vue({
+                el:'.app',
+                data:{
+                    time:new Date()
+                },
+                methods:{
+                    
+                },
+                filters:{
+                    dataFormat(data,arg=""){
+
+                        //data 指向的就是 time 这个变量
+                        //arg 指向的就是要传递的参数
+                        var dt = new Date(data);
+
+                        //接收年月日
+                        var y = dt.getFullYear();
+
+                        //在使用 padStart() 只会对字符串有作用，因此要把时间转换成字符串 可以使用 toString()，再使用 padStart()
+                        var m = (dt.getMonth()+1).toString().padStart(2,'0');
+
+                        //padStart() 是在指定变量的前面补字符，第一个参数是数量，也就是说补完之后的字符个数，第二个参数是用什么来补，如果是'0'，那么就是用 0 来补
+                        //padEnd() 是在指定变量的后面补字符，后面的参数设置和 padStart() 是一样1的
+
+
+                        var d = dt.getDate();
+
+                        //接收时分秒
+                        var hh = dt.getHours();
+                        var mm = dt.getMinutes();
+                        var ss = dt.getSeconds();
+
+                        if(arg.toLowerCase() == 'yyyy-mm-dd'){
+                            return `${y}-${m}-${d}`;
+                        }else{
+                            return `${y}-${m}-${d} ${hh}:${mm}:${ss}`;
+                        }
+
+                    }
+                }
+            });
+        
+        </script>
+    </body>
+</html>

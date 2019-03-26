@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>v-on绑定事件</title>
+    <script src="vue.js"></script>
+</head>
+<body>
+    <!-- vue中提供了v-on来绑定事件 -->
+    <div class="app">
+        <input type="button" v-on:click="show" value="点击我会触发事件">
+        <!-- v-on的缩写是@，也就是说 v-on:click 可以写成 @click 就可以了 -->
+        <!-- 之前v-bind的缩写是: 要记得 -->
+        <p>{{ message }}</p>
+    </div>
+    <div class="app2">
+        <input type="button" @click='startmove' value="startmove">
+        <input type="button" @click='stopmove' value="stopmove">
+        <p>{{ msg }}</p>
+    </div>
+
+
+    <script>
+    
+        var app = new Vue({
+            el:'.app',
+            methods:{
+               show:function(){
+                   console.log('hello');
+               }
+            },
+            data:{
+                message:'nihao'
+            }
+            /* methods可以理解为要定义的方法的集合，同时methods是一个对象 */
+            
+        });
+
+        var timer;
+
+        var app2 = new Vue({
+            el:'.app2',
+            data:{
+                msg:'爱你一万年'
+            },
+            methods:{
+                startmove:function(){
+                    timer = setInterval(function(){
+                        var start = this.msg.substring(0,1);
+                        var end = this.msg.substring(1);
+                        this.msg = end + start;
+                    },300);
+                },
+                stopmove:function(){
+                    clearInterval(timer);
+                }
+            }
+        });
+    
+    </script>
+</body>
+</html>

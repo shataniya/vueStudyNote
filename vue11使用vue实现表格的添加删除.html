@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>使用vue实现表格的删除添加</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <script src="js/jquery-3.3.1.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        <script src="vue.js"></script>
+        <!-- vue里面不建议使用jquery -->
+    </head>
+    <body>
+        <div class="container my-2" id="formContent">
+            <form>
+                <div class="form-group row">
+                    <label for="idcontent" class="col-1 col-form-label">ID:</label>
+                    <div class="col-2">
+                        <input class="form-control" type="text" id="idcontent" placeholder="Enter ID" v-model="idcontent">
+                    </div>
+                    <label for="namecontent" class="col-1 col-form-label">Name:</label>
+                    <div class="col-2">
+                        <input class="form-control" type="text" id="namecontent" placeholder="Enter Name" v-model="namecontent">
+                    </div>
+                    <label class="col-1 col-form-label" for="salarycontent">salary:</label>
+                    <div class="col-2">
+                        <input class="form-control" type="text" placeholder="Enter Salary" id="salarycontent" v-model="salarycontent" @keyup.f2="AddPerson">
+                        <!-- 这里有一个细节：当鼠标点击方框引出的选项的时候，就是默认按下了 enter(回车) 键 -->
+                    </div>
+                    <div class="col-1">
+                        <button class="btn btn-primary" type="button"  @click="AddPerson">Add</button>
+                    </div>
+                    <div class="col-2 input-group">
+                        <!-- 注意：Vue中所有的指令，在调用的时候，都以 v- 开头 -->
+                        <input class="form-control" type="text" aria-describedby="labelbtn" v-model="keywords" v-focus v-color>
+                        <!-- <div class="input-group-append">
+                            <a class="btn btn-primary" role="button" href="javascript:;" id="labelbtn">Search</a>
+                        </div> -->
+                    </div>
+                    
+                </div>
+            </form>
+            <!-- 如何在bootstrap中使用table -->
+            <!-- 1.table分为表格标题和表格内容，即 thead 和 tbody -->
+            <!-- 2.一般用 tr 来进行包装，里边的内容如果是标题就用 th ,如果是文本就是用 td ,就好比 ul 和里边的 li 一样 -->
+
+            <!-- 3.在每一行中，如果想要合并列，那么就是用 colspan 属性，如果 colspan="2" 就表示合并两列 -->
+            <!-- 4.在每一列中，如果想要列合并，可以使用 rowspan 属性，如果 rowspan="2" 就表示合并两列 -->
+            <!-- 5.可以在表格中class属性添加 table-{sccess,info,danger,warning} 或者 bg-{sccess,info,danger,warning} 来改变背景颜色 -->
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Salary</th>
+                        <th scope="col">AddTime</th>
+                        <th scope="col" class="text-center">Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="item in search(keywords)" :key="item.id" v-color="'green'">
+                        <!-- 在这里 list 不能写死了 -->
+                        <td>{{item.id}}</td>
+                        <td>{{item.name}}</td>
+                        <td>{{item.salary}}</td>
+                        <td>{{item.addtime | msgFormat('yyyy-mm-dd')}}</td>
+                        <td class="text-center">
+                            <!-- 使用.prevent消除a链接的默认跳转行为 -->
+                            <a class="btn btn-primary" href="" @click.prevent="removePerson(item.id)">delete</a>
+                            <!-- 在方法名中有小括号的目的是为了传参数 -->
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="container my-2" id="app">
+            <p v-fontsize="'30px'" v-fontstyle="'italic'">{{ dt | msgFormat() }}</p>
+        </div>
+
+
+        <script>
+
+            Vue.filter('msgFormat',function(data,pattern=""){//给pattern添加默认值""
+                var dt = new Date(data);
+
+                //yyyy-mm-dd
+                var y = dt.getFullYear();
+                var m = dt.getMonth()+1;
+                var d = dt.getDate();
+                /* return y+'-'+m+'-'+d; */
+
+                var hh = dt.getHours();
+                var mm = dt.getMinutes();
+                var ss = dt.getSeconds();
+
+                /* return `${y}-${m}-${d} ${hh}:${mm}:${ss}`; */
+                
+                //如果没有传递参数，那么pattern的值就是undefined,如果是undefined，那么就不能调用 toLowerCase() 方法
+                pattern = /* pattern&& */pattern.toLowerCase();
+
+                //也可以使用ES6中最新的方法，给pattern添加一个默认值就可以了
+                if(pattern == 'yyyy-mm-dd'){
+                    return `${y}-${m}-${d}`;
+                }else{
+                    return `${y}-${m}-${d} ${hh}:${mm}:${ss}`;
+                }
+                
+            })
+
+
+            //自定义全局键盘修饰符
+            //语法：Vue.config.keyCodes.名称 = 按键值
+            Vue.config.keyCodes.f2 = 113;
+
+
+            //自定义全局指令 使用  Vue.directive() 自定义全局的指令
+            //参数1：指令的名称  注意：在定义的时候指令的名称前面不需要加 v- 前缀，但是调用的时候，必须在指令前加 v- 前缀
+            //参数2：是一个对象，在对象身上有一些指令相关的函数，这些函数可以在特定的阶段执行相关的操作
+            Vue.directive('focus',{
+                bind:function(el){ 
+                    //每当指令绑定到元素上的时候，就会立即执行这个 bind 函数，只执行一次
+
+                    //注意：在每一个函数中，第一个参数永远是 el ,表示被绑定了指令的那个元素，这个 el 参数，是一个原生的 js 对象，可以调用原生的 js 方法
+
+                    //在元素 刚绑定了指令的时候，还没有 插入到 DOM 中去，这时候，调用 focus() 方法没有作用
+                    //因为一个元素 只有插入 DOM 之后，才能获取焦点
+                    //el.focus()
+                },
+                inserted:function(el){
+                    //inserted 表示元素 插入到DOM中的时候，会执行 inserted 函数，【触发一次】
+                    el.focus();
+                },
+                updated:function(){
+                    //当 VNode（组件） 更新的时候，会执行 updated ，可能会触发多次 
+                }
+            });
+
+            Vue.directive('color',{
+                bind:function(el,binding){
+
+                    //bind 和 inserted 的区别 （个人感悟）
+                    //1.bind 绑定的指令 是绑定在内存当中 而 inserted 绑定的指令是绑定在内存和页面中
+                    //2.和内存有关的演示最好使用 bind 绑定，而和 js行为 有关的方法使用 inserted 绑定
+                    el.style.color = binding.value;
+
+
+                    //对于 bind绑定 ：
+                    //第一个参数是 el ,也就是被 bind 绑定的原生 js对象
+                    //第二个参数是 binding ,是一个对象，里面含有一些属性: 
+                    //  1.name 指的就是当前定义的指令的名称 
+                    //  2.value 就是获取的传递参数，但是获取的是计算之后的参数，而不是字符串形式的参数
+                    //  3.expression 也是获取传递参数，但是获取的是字符串形式的参数
+
+                    /* console.log(binding.value);
+                    console.log(binding.expression); */
+                },
+                inserted:function(el){
+                    /* el.style.color = "red"; */
+                },
+                updated:function(){}
+            });
+
+
+
+
+
+        
+            var vm = new Vue({
+                el:'#formContent',
+                data:{
+                    idcontent:'',
+                    namecontent:'',
+                    salarycontent:'',
+                    keywords:'',//获取搜索关键字
+                    list:[
+                        {id:1,name:'Mark',salary:'$4000',addtime:new Date()},
+                        {id:2,name:'Jack',salary:'$5000',addtime:new Date()},
+                        {id:3,name:'Tom',salary:'$6000',addtime:new Date()},
+                        {id:4,name:'Bale',salary:'$7000',addtime:new Date()}
+                    ]
+                },
+                methods:{
+                    AddPerson(){
+
+                        if((!!this.idcontent)&&(!!this.namecontent)&&(!!this.salarycontent)){
+                            //如果填写完信息那么就进行添加
+
+                            //向list添加数据
+                            this.list.push({id:this.idcontent,name:this.namecontent,salary:this.salarycontent,addtime:new Date()});
+                            //添加之后要把方框里面的数据清空
+                            this.idcontent = this.namecontent = this.salarycontent = "";
+                        }else{
+
+                            //如果还有信息没有填完就提示，弹窗
+                            alert('please input information sheer');
+                        }
+                    },
+                    removePerson(id){
+                        //根据id找到相应的的索引值，然后根据索引值来删除list数组中的对象元素
+                        //第一种方法：使用 findIndex() 找到索引
+                        /* var index = this.list.findIndex(item => {
+                            if(item.id == id){
+                                return true;
+                            }
+                        });
+                        this.list.splice(index,1); */
+
+                        //第二种方法：使用 some() 找到索引，然后执行删除
+                        //some() 功能是当找到符合条件的元素的时候，可以使用 return true; 来终止遍历
+                        this.list.some((item,i) => {
+                            if(item.id == id){
+                                this.list.splice(i,1);
+                                return true;
+                            }
+                        });
+
+                        //这两种方法效果是一样的
+                    },
+                    search(keywords){
+                        //第一个方法：使用 forEach() 遍历，然后使用 indexOf() 检查是否包含指定的字符串
+                        //indexOf() 1.如果包含，返回一个非负数 2.如果不包含，返回-1
+                        /* var newList = [];
+                        this.list.forEach(item => {
+                            if(item.name.indexOf(keywords) != -1){
+                                newList.push(item);
+                            }
+                        });
+                        return newList; */
+
+                        //第二种方法：使用 filter() 遍历，然后使用 includes() 检查是否包含指定的字符串
+                        //filter() 会把遍历之后符合条件的元素重新组成一个数组返回
+                        //includes() 1.如果包含指定的字符串，返回 true 2.如果不包含，返回 false
+                        var newList = this.list.filter(item => {
+                            if(item.name.includes(keywords)){
+                                return item;//如果符合条件，就返回这个元素，那么因为 filter() 的作用会把这些符合条件返回的元素重新组成一个新的数组返回
+                            }
+                        });
+                        //定义一个新的数组 newList 来接收 filter() 返回的数组
+                        return newList;//再把这个数组作为 search() 函数的返回值返回
+                    }
+                }
+            });
+
+            var vm2 = new Vue({
+                el:'#app',
+                data:{
+                    dt:new Date()
+                },
+                directives:{
+
+                    //自定义私有指令
+
+                    //私有的内部可以有多个指令，因此是 directives 而不是 directive
+
+                    'fontsize':{
+                        bind:function(el,binding){
+                            el.style.fontSize = binding.value;
+
+                            //经过测试，感悟出了新的 value 和 expression 的区别
+                            //如果输入的传递参数是字符串，有两种形式：1.输入'字符串'，使用 biinding.value 2.输入 字符串 ，使用 binding.expression
+                            //建议使用第一种，因为如果是 不加单引号的字符串 ，那么会默认为是变量，然后会偶从data里寻找，一旦找不到会报错
+                            //虽然使用 biinding.exprerssion 没问题，但是会报错，为了避免报错，使用第一种方法，输入 '字符串' ，然后使用 binding.value
+                        }
+                    },
+                    'fontstyle':function(el,binding){ //这是简写，相当于把 function 写到 bind 或者 update 中去
+                        
+                        //反过来说，也就是只有 bind 和 update 才能缩写
+                        el.style.fontStyle = binding.value;
+                    }
+
+                }
+            });
+        
+        </script>
+    </body>
+</html>

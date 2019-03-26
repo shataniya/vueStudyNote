@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>vue生命周期</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        <script src="vue.js"></script>
+    </head>
+    <body>
+        <div class="app">
+            <a class="btn btn-primary" href="" @click.prevent="datachanges">点我实现数据更新并触发beforeUpdate和updated</a>
+            <h3 id="h3">{{ message }}</h3>
+        </div>
+
+
+        <script>
+        
+            var vm = new Vue({
+                el:'.app',
+                data:{
+                    message:'hello world'
+                },
+                methods:{
+                    show(){
+                        console.log('已经执行了 show 方法');
+                    },
+                    datachanges(){
+                        this.message = "你好";
+                    }
+                },
+                beforeCreate(){ //这是遇到的第一个生命周期函数，这个时候 Vue 里边的 data 和 methods 还没有被初始化
+                    //console.log(this.message);//undefiined
+                    //this.show();//this.show is not a function
+
+                    //可以看见，message 和 this.show 还没有被初始化
+
+                    //因此得出结论：在 beforeCreate 生命周期函数执行的时候，data 和 methods 还没有被初始化
+                },
+                created(){ //这是遇到的第二个生命周期函数
+                    //console.log(this.message);
+                    //this.show();
+                    //可以看见，data 和 methods 已经被初始化了
+
+                    //因此得出结论：在 created 生命周期函数执行的时候，data 和 methods 已经被初始化好了
+
+                    //也就是说，你想最早在 data 和 methods 里边 操作数据 或者 调用函数 只能在 created 里操作，再往前的话，都还没有初始化
+                },
+                beforeMount(){ //这是遇到的第三个生命周期函数 表示 模板已经在内存中编辑完成了，但是还没有把模板渲染到页面中
+                    
+                    //console.log(document.getElementById('h3').innerText);
+                    //可以看见，在 beforeMount 执行的时候，页面中的元素还没有真正替换过来，只是之前写的模板字符串
+
+                    //因此 beforeMount 是将要把内存里的模板渲染到页面的过程，因此实际上页面还没有被渲染，因此页面还是旧的页面
+                },
+                mounted(){ //这是遇到的第四个生命周期函数，表示 内存中的模板已经挂在到页面中，用户已经可以看到渲染好的页面了
+                    //console.log(document.getElementById('h3').innerText);
+                    //可以看见，显示了页面上最新的数据
+
+                    //换句话说，当执行 mounted 的时候，页面已经被渲染好了，因此，mounted 是实例创建的最后一个生命周期函数，当执行完
+                    //mounted 说明实例已经被完全创建好了，此时，如果没有其他操作的话，这个实例，就静静地，躺在内存里一动不动
+
+                    //如果要通过某些插件操作页面上的DOM节点，最早要在 mounted 里操作
+
+                    //只要执行完了 mounted ，就表示整个 vue实例 已经初始化完成了，此时，组件已经脱离了创建阶段，进入到了运行阶段
+                },
+
+                //进入运行阶段，有两个生命周期函数 beforeUpdate 和 updated
+                beforeUpdate(){
+                    //console.log('执行了一次 beforeUpdated 方法');
+                    console.log('数据更新之前：'+document.getElementById('h3').innerText);
+
+                    //当数据更新的时候，就触发了 beforeUpdate ,在 beforeUpdate 执行之前，内存中已经根据最新的数据，生成的最新的 DOM模板
+                    //在 beforeUpdate 事件触发完之后，再把内存中最新的 DOOM模板 渲染到真实的页面中，实现了数据的更新，M -> V
+                },
+                updated(){
+                    console.log('数据更新之后：'+document.getElementById('h3').innerText);
+
+                    //updated 事件实行的时候，页面和 data 数据已经保持同步了，都是最新的
+                },
+
+                //在 vue实例 进行销毁阶段，有两个函数 beforeDestory 和 destoryed
+                beforeDestory(){
+                    //在执行 beforeDestory 的时候，vue实例 开始从 运行阶段 到 销毁阶段，这个时候还没有开始销毁，所有的 data methods 指令 过滤器都还在
+                    //在 beforeDestory 执行完之后，vue实例 开始进行销毁 
+                },
+                destoryed(){
+                    //执行 destoryed 的时候，说明 vue实例 已经销毁完成了
+                }
+            });
+        
+        </script>
+    </body>
+</html>

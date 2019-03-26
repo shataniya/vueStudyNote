@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="vue.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script> -->
+    <style>
+    
+        [v-cloak]{
+            display: none;
+        }
+    
+    </style>
+</head>
+<body>
+    <div id="app">
+        <p v-cloak>{{msg}}</p>
+        <!-- v-cloak:能够解决 插值表达式 的闪烁问题 -->
+        <p v-text='msg'>{{msg}}</p>
+        <!-- 如果还没有解析到 v-text 那么p标签里的内容应该是{{msg}}，但是一旦解析到了v-text，那么就会渲染p标签，会把内容覆盖了 -->
+        <!-- v-text 会把元素的内容覆盖了，但是插值表达式指挥把占位符覆盖掉，而不会把内容覆盖掉 -->
+        <p>{{msg2}}</p>
+        <p v-text='msg3'></p>
+        <p v-html='msg3'></p>
+        <!-- 
+            v-text和v-html的区别：
+            v-text:会把标签里的内容覆盖掉，不识别标签符号
+            v-html:也会把标签里的内容覆盖掉，但是可以识别标签符号
+
+
+
+         -->
+    </div>
+    <!-- <script src="vue.js"></script> -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script> -->
+    <script>
+    
+        var app = new Vue({
+            el:'#app',/* el:指向的是要控制的元素，但是要注意一点就是，在书写指向元素的名称是，要用字符串的形式，就是要记得用 '' 把元素名称括起来，还有就是
+            id:记得要用 # 在开头
+            class:记得要用 . 在开头
+             */
+            /* data:里面存储的是控制元素的内容，或者说存储的是渲染 dom元素 的内容 */
+            data:{
+                msg:'hello world',
+                msg2:'ni hao',
+                msg3:'<h1>我是h1</h1>'
+            }
+        })
+    
+    </script>
+</body>
+</html>    

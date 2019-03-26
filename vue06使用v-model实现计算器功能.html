@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>v-model实现计算器功能</title>
+        <script src="vue.js"></script>
+        <style>
+        
+            input,select{
+                display: block;
+                box-sizing: border-box;
+                width: 100px;
+                height: 50px;
+                padding: 0 20px;
+            }
+        
+        </style>
+    </head>
+    <body>
+        <div class="app">
+            <input type="text" v-model="n1">
+            <select v-model="opt">
+                <option value="+">+</option>
+                <option value="-">-</option>
+                <option value="*">*</option>
+                <option value="/">/</option>
+            </select>
+            <input type="text" v-model="n2">
+            <input type="button" value="=" @click="operation">
+            <input type="text" v-model="result">
+        </div>
+
+
+        <script>
+        
+            var vm = new Vue({
+                el:'.app',
+                data:{
+                    n1:'0',
+                    n2:'0',
+                    result:'0',
+                    opt:'-'
+                },
+                methods:{
+                    operation(){
+                        /* switch(this.opt){
+                            case '+':
+                                this.result = parseInt(this.n1)+parseInt(this.n2);
+                                break;
+                            case '-':
+                                this.result = parseInt(this.n1)-parseInt(this.n2);
+                                break;
+                            case '*':
+                                this.result = parseInt(this.n1)*parseInt(this.n2);
+                                break;
+                            case '/':
+                                this.result = parseInt(this.n1)/parseInt(this.n2);
+                                break;
+                        } */
+
+                        /* 
+                            记住在vue里边如果需要用到里边自定义的变量，那么就使用this
+                            例如：var vm = new Vue();
+                             在vm里边定义的函数functon1里如果要使用上里边的变量，那么就是用this.变量,而不是vm.变量
+                        */
+
+
+                        /* 也可以使用eval()函数进行解析 */
+                        var content = "parseInt(this.n1)"+this.opt+"parseInt(this.n2)";
+                        this.result = eval(content);
+                        /* 但是这样属于投机取巧，在开发过程中尽量不使用 */
+
+                        /* eval()可以解析字符串，并且解析的结果返回 */
+                    }
+                }
+            });
+        
+        </script>
+    </body>
+</html>

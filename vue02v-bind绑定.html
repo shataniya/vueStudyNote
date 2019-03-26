@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>v-bind绑定属性</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <!-- v-bind:bind就是绑定规定的意思，就是要给指定元素绑定一个变量 -->
+    <div class="app" :title='message'>我爱你</div>
+    <!-- 在以后的开发中，为了方便，会把v-bind省略，只留下冒号，即 :title 这个的意思相当于 v-bind:title，因此以后看到冒号就是绑定的意思 -->
+    
+    <script>
+    
+        var app = new Vue({
+            el:'.app',/* el就是element的缩写，就是指向要指定的元素 */
+            data:{
+                message:'一万年'
+            }
+        });
+    
+    </script>
+
+</body>
+</html>

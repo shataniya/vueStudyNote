@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>vue-resource的使用</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        <script src="vue.js"></script>
+
+        <!-- vue-resource 的使用依赖于 vue ，因此先导入 vue ，再导入 vue-resource -->
+        <script src="https://cdn.jsdelivr.net/npm/vue-resource@1.5.1"></script>
+    </head>
+    <body>
+        <div class="app">
+            <a class="btn btn-primary" href="" @click.prevent="getInfo">get请求</a>
+        </div>
+
+
+        <script>
+        
+            var vm = new Vue({
+                el:'.app',
+                data:{
+                    message:'hello world'
+                },
+                methods:{
+                    getInfo(){
+                        this.$http.get('https://winmoes.com/').then(function(result){
+                            console.log(result);
+                        },function(){
+                            alert("获取数据失败");
+                        })
+                    }
+                }
+            });
+        
+        </script>
+    </body>
+</html>
+
+

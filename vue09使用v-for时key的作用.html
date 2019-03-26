@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>v-for在遍历时key的作用</title>
+        <script src="vue.js"></script>
+    </head>
+    <body>
+        <div class="app">
+            <input type="text" v-model="id">
+            <input type="text" v-model="name">
+            <input type="button" value="添加" @click="add">
+            <div v-for="item in list" :key="item.id">
+                <!-- key 必须是 number 或者 string ，通过 v-bind 为 key 绑定变量 item.id ，这样就是能唯一的标识每一个选项，通过标识也就能认出打上勾的是谁了 -->
+                <input type="checkbox">
+                <p>{{item.id}} --> {{item.name}}</p>
+            </div>
+        </div>
+
+
+        <script>
+        
+            var vm = new Vue({
+                el:'.app',
+                data:{
+                    id:'',
+                    name:'',
+                    list:[
+                        {id:1,name:'唐僧'},
+                        {id:2,name:'孙悟空'},
+                        {id:3,name:'猪八戒'},
+                        {id:4,name:'沙和尚'}
+                        /* 令沙和尚打上勾 */
+                    ]
+
+                },
+                methods:{
+                    add(){
+                        /* this.list.push({id:this.id,name:this.name}); */
+                        this.list.unshift({id:this.id,name:this.name});
+                        /* 这个时候会发现原本打上勾的是沙和尚，但是添加之后变成了猪八戒 */
+                        /* 那是因为虽然打上勾，但是不知道你打上勾的是谁，说白了就是打上勾了但是没有锁定目标，
+                           为了锁定目标应该要给目标打上标签，这就是key的作用 
+                        */
+                    }
+                }
+            });
+        
+        </script>
+    </body>
+</html>

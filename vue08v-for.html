@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>v-for</title>
+        <script src="vue.js"></script>
+    </head>
+    <body>
+        <div class="app">
+            <!-- 第一个功能： -->
+            <!-- v-for 遍历普通数组 -->
+            <p v-for="(item,i) in list">索引是{{i}},内容是{{item}}</p>
+
+            <!-- 第二个功能： -->
+            <!-- v-for 可以遍历普通数组，也可以遍历对象数组 -->
+            <p v-for="(user,i) in UserList">用户的id是{{user.id}},名字是{{user.name}},索引是{{i}}</p>
+
+            <!-- 第三个功能： -->
+            <!-- v-for 可以遍历对象里所有的属性 -->
+            <!-- 但是要注意：在遍历对象的时候，第一个值是属性值，而第二个值才是属性名
+                 (val,key),第一个值是属性值，第二个值是属性名,当然还有一个索引值，就是第三个值，(val,key,i)中第三个值i就是索引，但是很少用得上
+            -->
+            <p v-for="(val,key,i) in user">{{val}},{{key}},{{i}}</p>
+
+            <!-- 第四个功能： -->
+            <!-- v-for 可以遍历数字，意思就是从1开始遍历到指定的数字 -->
+            <p v-for="count in num">这是{{count}}</p>
+
+        </div>
+
+
+        <script>
+        
+            var vm = new Vue({
+                el:'.app',
+                data:{
+                    message:'hello world',
+                    list:[1,2,3,4,5,6],
+                    UserList:[
+                        {id:1,name:'biubiu1'},
+                        {id:2,name:'biubiu2'},
+                        {id:3,name:'biubiu3'},
+                        {id:4,name:'biubiu4'},
+                        {id:5,name:'biubiu5'},
+                        {id:6,name:'biubiu6'}
+                    ],
+                    user:{
+                        id:'20161229',
+                        name:'laowang',
+                        gender:'man',
+                    },
+                    num:30
+                },
+                methods:{
+                    
+                }
+            });
+        
+        </script>
+    </body>
+</html>
