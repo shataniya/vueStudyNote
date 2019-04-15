@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>watch监听路由的变化</title>
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+        <script src="https://unpkg.com/vue-router@3.0.2/dist/vue-router.js"></script>
+    </head>
+    <body>
+        <form class="my-2 container" id="app">
+            <div class="form-group row">
+                <div class="col-2">
+                    <input type="text" class="form-control" v-model="content1" @keyup="getFullName">
+                </div>
+                <a class="btn btn-primary" href="" @click.prevent>+</a>
+                <div class="col-2">
+                    <input type="text" class="form-control" v-model="content2" @keyup="getFullName">
+                </div>
+                <a class="btn btn-primary" href="" @click.prevent>=</a>
+                <div class="col-4">
+                    <input type="text" class="form-control" v-model="content3">
+                </div>
+            </div>
+        </form>
+
+        <div id="app2" class="container">
+            <router-link class="btn btn-outline-success" to="/login">登录</router-link>
+            <router-link class="btn btn-outline-danger" to="/register">注册</router-link>
+
+            <router-view></router-view>
+        </div>
+
+        <template id="temp1">
+            <div>
+                <h1>这是一个登录组件</h1>
+            </div>
+        </template>
+
+        <template id="temp2">
+            <div>
+                <h1>这是一个注册组件</h1>
+            </div>
+        </template>
+
+
+        <script>
+
+            var login = {
+                template:'#temp1'
+            };
+
+            var register = {
+                template:'#temp2'
+            };
+
+            var routerDemo = new VueRouter({
+                routes:[
+                    { path:'/login' , component: login },
+                    { path:'/register' , component: register }
+                ],
+            });
+
+            var vm2 = new Vue({
+                el:'#app2',
+                data:{},
+                methdos:{},
+                router:routerDemo,
+                watch:{
+                    '$route.path':function(newVal,olaVal){
+                        /* console.log('newValue = '+newVal+", oldValue = "+olaVal); */
+                        if( newVal == '/login' ){
+                            alert('欢迎进入登录界面');
+                        }else if( newVal == '/register' ){
+                            alert('欢迎进入注册界面');
+                        }
+                    }
+                }
+            });
+        
+            var vm = new Vue({
+                el:'#app',
+                data:{
+                    content1:'',
+                    content2:'',
+                    content3:'',
+                },
+                methods:{
+                    getFullName(){
+                        /* this.content3 = this.content1+''+this.content2; */
+                    }
+                },
+                watch:{  //watch 属性是用来监听数据变化的，当数据变化的时候，就会出发数据之后的函数
+                    'content1':function(newValue,oldValue){
+                        //function() 里第一个参数是：新值，第二个参数是旧值
+                        console.log('newVlue = '+newValue+",olaValue = "+oldValue);
+                        this.content3 = this.content1+''+this.content2
+                    },
+                    'content2':function(){
+                        this.content3 = this.content1+''+this.content2
+                    },
+                    'content3':function(){
+                        this.content3 = this.content1+''+this.content2
+                    },
+
+                    //可以看见，watch 监听数据的时候需要绑定多个数据，因此相比于 keyup ，在绑定数据方面，watch 不具备优势
+
+                    //但是，watch 也有自己的优势，就是监听路由的变化，路由不是一个元素，因此 keyup 无能为力，这个时候只能是 watch 来监听
+
+                    //因此，对于 非DOM元素 ，可以用 watch 监听它的改变
+                }
+            });
+        
+        </script>
+    </body>
+</html>

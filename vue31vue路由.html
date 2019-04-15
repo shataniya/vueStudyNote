@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>vue路由</title>
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+        <script src="https://unpkg.com/vue-router@3.0.2/dist/vue-router.js"></script>
+
+        <style>
+        
+            .router-link-active{
+                font-weight: 900;
+                font-style: italic;
+            }
+
+            .v-enter,.v-leave-to{
+                opacity: 0;
+                transform: translateX(140px);
+            }
+            .v-enter-active,.v-leave-active{
+                transition: all 0.5s ease;
+            }
+        
+        </style>
+
+
+    </head>
+    <body>
+
+        <div id="app">
+            <!-- 因为是通过 hash（#号）来实现的，因此调用路径的时候要在前面加上#号 -->
+            <!-- <a class="btn btn-info" role="button" href="#/login">登录</a> -->
+            <!-- <a class="btn btn-warning" role="button" href="#/register">注册</a> -->
+
+            <!-- 但是通过a连接的方式，href引入挺烦人的，因此 vue-router 提供了 router-link标签，标签里的 to属性可以指向要跳转的页面或者组件 -->
+            <router-link class="btn btn-outline-primary" to="/login">登录</router-link>
+            <router-link class="btn btn-outline-primary" to="/register">注册</router-link>
+            <!-- router-link 默认渲染成 a连接，当然你也可以通过 tag属性来修改，指定渲染之后成什么标签 例如改成span标签，则 tag="span" -->
+
+
+            <!-- 这是 vue-router 提供的元素，转么专门用来 当做占位符的，将来，路由规则，匹配到的组件，就会展示到这个 router-view 中去 -->
+            <!-- 所以，可以认为 router-view 是一个 占位符 -->
+            <transition mode="out-in">
+                <router-view></router-view>
+            </transition>
+        </div>
+        
+        <template id="temp1">
+            <div>
+                <h1>登录组件</h1>
+            </div>
+        </template>
+
+        <template id="temp2">
+            <div>
+                <h1>注册组件</h1>
+            </div>
+        </template>
+
+
+        <script>
+
+            var login = {
+                template:'#temp1'
+            };
+
+            var register = {
+                template:'#temp2'
+            };
+
+
+
+            //路由的两个概念：前端路由 和 后端路由
+            //后端路由：每一个前段的超链接都是一个url地址，把所有的URL地址都对应上服务器上对应的资源
+
+            //前端路由：对于单页面来说，通过URL中的hash（#号）来实现不同页面之间的切换，单页面程序中的页面跳转主要通过hash来实现
+            //通过点击不同的a链接来实现不同组件之间的切换，是通过hash来实现的，这就是前端路由
+
+            //创建一个路由对象
+            //在 new 路由对象的时候，可以为 构造函数，传递一个配置对象
+            var routerObj = new VueRouter({
+                //route // 这个配置对象中的 route ，表示 【路由匹配规则】 的意思
+                routes:[ //路由匹配规则 一般使用 routes ，注意不是 routers
+                    //每一个路由规则，都是一个对象，在这个对象身上，有两个必须的属性：
+                    //属性1 是 path ，表示监听 哪个路由器的地址
+                    //属性2 是 component ，表示，如果 路由是前面匹配到的 path ，则展示 components 属性对应的那个组件
+                    //注意：component 属性值必须是一个模板对象，而不能是 模板对象的引用名称
+                    { path:'/',redirect:'/login' },
+                    //使用 redirect 来重新定位，默认的是哪个组件，使用方法：redirect:'默认路径'
+                    { path:'/login',component:login }, 
+                    { path:'/register',component:register }
+                ],
+                linkActiveClass:'myactive' //linkActiveClass 可以自定义类名，实现路由高亮，或者可以使用默认的类名 router-link-active 来实现路由高亮
+            });
+
+            var vm = new Vue({
+                el:'#app',
+                data:{},
+                methods:{},
+                router:routerObj, // 将路由规则对象，注册到vm实例上，用来监听 URL 地址的变化，然后展示
+            });
+
+            //使用 路由对象 实现页面的跳转
+            // 1.创建一个路由对象 ，new VueRouter()，每一个路由对象都会有一个 路由匹配规则：routes ，里面有两个必须的属性 1.path（路径） 2.component（组件）
+                //注意：component 属性值必须要是 模板对象，而不能是模板对象的名称
+            // 2.创建相应的组件，然后把这个组件放到 路由对象的 component 属性里面
+            // 3.再把这个 路由对象 放进 vue实例中，vue实例里面有 router 属性，就是为了存放 创建的路由对象的
+            // 4.然后引用这些组件的时候，vue-router 专门提供了占位符 router-view标签，直接把 router-view标签 放进 vue实例控制的DOM元素中就可以了
+            // 5.实现页面的跳转的时候，在链接的属性值，就是控制的组件名称，不过记得在前面加上 #号 就可以了
+        
+        </script>
+    </body>
+</html>

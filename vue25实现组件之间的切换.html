@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>组件之间的切换</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        <script src="vue.js"></script>
+
+        <style>
+        
+            .v-enter,.v-leave-to{
+                opacity: 0;
+                transform: translateX(100px);
+            }
+
+            .v-enter-active,.v-leave-active{
+                transition: all 0.5s ease;
+            }
+        
+        </style>
+
+
+    </head>
+    <body>
+
+        <div id="app">
+            <a class="btn btn-info" role="button" href="" @click.prevent="comname='login'">登录</a>
+            <a class="btn btn-warning" role="button" href="" @click.prevent="comname='register'">注册</a>
+            <!-- <login v-if="flag"></login>
+            <register v-else="flag"></register> -->
+
+            <!-- v-if 和 v-else 只能实现两个组件之间的切换，但是对于三个或者三个以上的组件无能为力 -->
+
+            <!-- 切换组建的第二种方式： -->
+            <!-- vue 提供了 coomponent ，来展示对应名称的组件 -->
+            <!-- component 是一个占位符， :is="" 属性是,可以用来指示要展示的组件的名称，组件名称是一个字符串，记得使用单引号括起来 '字符串' -->
+
+            <transition mode="out-in">
+                <!-- mode 属性可以设置组件的切换模式 mode="out-in" 表示 退出的动画执行完了 再执行 进入的动画 -->
+                <component :is="comname"></component>
+            </transition>
+        </div>
+        <template id="temp1">
+            <div>
+                <h3>登录组件</h3>
+            </div>
+        </template>
+
+        <template id="temp2">
+            <div>
+                <h3>注册组件</h3>
+            </div>
+        </template>
+        
+
+        <script>
+            
+            Vue.component('login',{
+                template:'#temp1'
+            });
+
+
+            Vue.component('register',{
+                template:'#temp2'
+            });
+
+
+            var app = new Vue({
+                el:'#app',
+                data:{
+                    flag:true,
+                    comname:'login'
+                },
+                methods:{
+                }
+            });
+
+
+        </script>
+
+
+
+    </body>
+</html>

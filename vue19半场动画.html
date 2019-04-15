@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>半场动画</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        <script src="vue.js"></script>
+        <!-- <link href="https://cdn.jsdelivr.net/npm/animate.css@3.5.1" rel="stylesheet" type="text/css"> -->
+
+        <style>
+        
+            .ball{
+                width: 15px;
+                height: 15px;
+                border-radius: 50%;
+                background-color: red;
+            }
+        
+        </style>
+
+    </head>
+    <body>
+
+        <div id="app">
+            <button class="btn btn-primary" @click="flag=!flag">action</button>
+            <!-- 1.使用 transition 把小球包裹起来 -->
+            <transition 
+                @before-enter="beforeEnter" 
+                @enter="enter" 
+                @after-enter="afterEnter">
+                <div class="ball" v-show="flag"></div>
+            </transition>
+        </div>
+
+        <script>
+        
+            var vm = new Vue({
+                el:'#app',
+                data:{
+                    flag:false
+                },
+                methods:{
+                    //注意： 动画javascript钩子函数的第一个参数：el ，表示 要执行动画的那个DOM元素，是个原生的 JS DOM对象
+                    //可以认为是通过 document.getElementById('') 获取到的 原生DOM对象
+                    beforeEnter(el){
+                        // beforeEnter 表示动画入场之前，此时动画未开始执行，可以在 beforeEnter() 中，设置元素开始动画之前的起始样式
+
+                        //设置小球起始之前的，起始位置
+                        el.style.transform = "translate(0,0)";
+                    },
+                    enter(el,done){
+
+                        //这句话，没有实际的作用，但是，如果没有，出不来动画的效果
+                        // 可以认为 el.offsetWidth 会强制刷新动画
+                        //el.offsetWidth
+                        //el.offsetWidth
+                        el.offsetLeft
+                        //测试过，el.height el.width 都不可以刷新 el.offsetWidth el.offsetWidth el.offsetTop el.offsetLeft 可以刷新
+                        //只要是和 offset 相关的都可以
+
+
+                        // eneter 表示动画开始之后的样式，这里，可以设置小球完成动画之后的，结束状态
+                        el.style.transform = "translate(150px,450px)";
+                        el.style.transition = "all 1s ease";
+
+                        done();
+
+                        //在执行 enter 和 leave 函数的时候，一定要记得加上 done() 函数进行 立即停止的效果，不然会有延迟的情况发生
+                        //同时，官方也是明确在执行 enter 和 leave 函数时在函数的最后要使用 done()函数
+                    },
+                    afterEnter(el){
+
+                        //动画完成之后会调用 afterEnter函数
+                        /* alert('动画执行完了') */
+                        this.flag = !this.flag
+                    }
+                }
+            });
+        
+        </script>
+
+        <script>
+        
+            //半场动画就是指执行进入的动画，不会执行退出的动画，对于这样的动画，只能借助钩子函数来执行
+
+            //可以在属性中声明 javascript钩子
+            //一共有8个 javascript钩子函数
+
+            //  动画进入的时候
+            //  1.@before-enter :进入之前
+            //  2.@enter :进入
+            //  3.@after-enter :进入之后
+            //  4.@enter-cancelled :取消进入  基本不用
+            //  如果只需要执行半场动画，那么只需用到动画进入的时候这4个函数就可以了
+
+            //  动画退出的时候
+            //  5.@before-leave
+            //  6.@leave
+            //  7.@after-leave
+            //  8.@leave-cancelled
+            
+        </script>
+
+        
+    </body>
+</html>

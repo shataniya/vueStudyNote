@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>列表动画</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        <script src="vue.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
+
+        <style>
+        
+            .v-enter,.v-leave-to{
+                opacity: 0;
+                transform: translateY(80px);
+            }
+            .v-enter-active,.v-leave-active{
+                transition: all 0.6s ease;
+            }
+            /* 默认会运动到 translate(0,0) */
+            /* .v-enter-to,.v-leave{
+                opacity: 1;
+                transform: translateY(40px);
+            } */
+            li{
+                width: 100%;
+            }
+            li:hover{
+                background-color: #ff6700;
+                transition: background-color 1.5s ease;
+            }
+
+
+            /* 下面的 v-move 和 v-leave-active 配合使用，能够实现列表后续元素的，渐渐的飘上来的效果 */
+            .v-move{
+                transition: all 0.6s ease;
+            }
+            .v-leave-active{
+                position: absolute;
+            }
+        
+        </style>
+
+
+    </head>
+    <body>
+        <div id="app">
+            <div class="container">
+                <form class="form-inline my-2">
+                    <div class="form-group">
+                        <label for="idtext" class="mr-2">ID:</label>
+                        <input class="form-control mr-2" id="idtext" type="text" placeholder="Enter ID" v-model="id">
+                    </div>
+                    <div class="form-group">
+                        <label for="nametext" class="mr-2">NAME:</label>
+                        <input class="form-control mr-2" id="nametext" type="text" placeholder="Enter NAME" v-model="name">
+                    </div>
+                    <a class="btn btn-primary col-2" href="" role="button" @click.prevent="add">ADD</a>
+                </form>
+                
+            </div>
+            <ul class="list-group">
+                <!-- 在实现列表过渡的时候，如果需要过渡元素的是通过 v-for 渲染出来的，不能使用 transition 包裹，要使用 transition-group 包裹 -->
+                <transition-group>
+                    <li class="list-group-item" :key="item.id" v-for="(item,i) in list" @click="del(i)">{{ item.id }} -->  {{ item.name }}</li>
+                </transition-group>
+            </ul>
+        </div>
+
+
+        <script>
+        
+            var vm = new Vue({
+                el:"#app",
+                data:{
+                    id:'',
+                    name:'',
+                    list:[
+                        { id:1,name:'张三' },
+                        { id:2,name:'李四' },
+                        { id:3,name:'王五' },
+                        { id:4,name:'赵六' }
+                    ]
+                },
+                methods:{
+                    add(){
+                        this.list.push({id:this.id,name:this.name});
+                        this.id = this.name = '';
+                    },
+                    del(i){
+                        this.list.splice(i,1);
+                    }
+                }
+            });
+        
+        </script>
+
+
+    </body>
+</html>

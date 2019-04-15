@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>vue私有组件</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        <script src="vue.js"></script>
+    </head>
+    <body>
+        
+        <div id="app">
+            <login></login>
+            <logout></logout>
+        </div>
+
+        <div id="app2">
+            <!-- <login></login> -->
+            <!-- 可以看见，因为 login 是 app 里内部定义的组件，因此 app2 是看不见的，或者说是不可以使用的 -->
+        </div>
+
+
+
+        <template id="temp1">
+            <div>
+                <p>这是 app 的私有组件的子元素</p>
+                <p>这是 app 的私有组件的子元素</p>
+            </div>
+        </template>
+        <template id="temp2">
+            <div>
+                <h1>我是 logout 组件</h1>
+                <p>并且是一个私有的组件</p>
+            </div>
+        </template>
+
+
+
+        <script>
+        
+            var vm = new Vue({
+                el:"#app",
+                data:{},
+                methods:{},
+                filters:{},
+                directives:{},
+                components:{
+                    // components 是用来定义 vue实例 内部私有的组件的，其他的 vue实例 是不能使用的
+                    //格式：
+                    //组件名称:{ template:'' },
+                    login:{
+                        template:'#temp1'
+                    },
+                    logout:{
+                        template:'#temp2'
+                    }
+                }
+            });
+
+            var vm2 = new Vue({
+                el:'#app2',
+                data:{},
+                methods:{},
+            });
+        
+        
+        </script>
+    </body>
+</html>

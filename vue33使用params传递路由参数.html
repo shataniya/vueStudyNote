@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>使用params调用参数</title>
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+        <script src="https://unpkg.com/vue-router@3.0.2/dist/vue-router.js"></script>
+    </head>
+    <body>
+
+        <div id="app">
+
+            <router-link class="btn btn-outline-primary" to="/login">登录</router-link>
+            <router-link class="btn btn-outline-primary" to="/register">注册</router-link>
+
+            <router-view></router-view>
+        </div>
+
+        <template id="temp1">
+            <div>
+                <h1>登录 --> {{ $route.params.id }} --> {{ $route.params.name }}</h1>
+                <!-- 可以在占位符中添加 $route.query.id 来调用传递过来的参数，不仅仅是id ，可以是 $route.query.属性名 来调用相应的参数 -->
+            </div>
+        </template>
+
+        <template id="temp2">
+            <div>
+                <h1>注册</h1>
+            </div>
+        </template>
+
+
+        <script>
+            
+            var login = {
+                template:'#temp1',
+                data(){
+                    return {
+                        msg1:''
+                    }
+                },
+                created(){ //组件的钩子函数
+                    console.log(this.$route.params.id)
+                },
+            };
+
+            var register = {
+                template:'#temp2'
+            };
+
+            var routerObj = new VueRouter({
+                routes:[
+                    { path:'/',redirect:'/login' },
+                    { path:'/login/:id/:name',component:login },
+                    { path:'/register',component:register }
+                ],
+            });
+
+            var vm = new Vue({
+                el:'#app',
+                data:{},
+                methods:{},
+                router:routerObj  //当属性名和属性值完全一样的时候，可以直接写属性名就可以了，例如：属性值和属性值都是router，那么可以只写router
+            });
+        
+        </script>
+    </body>
+</html>

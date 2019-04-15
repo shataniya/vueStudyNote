@@ -57,7 +57,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="item in search(keywords)" :key="item.id" v-color="'green'">
+                    <tr v-for="(item,i) in search(keywords)" :key="item.id" v-color="'green'">
                         <!-- 在这里 list 不能写死了 -->
                         <td>{{item.id}}</td>
                         <td>{{item.name}}</td>
@@ -65,7 +65,7 @@
                         <td>{{item.addtime | msgFormat('yyyy-mm-dd')}}</td>
                         <td class="text-center">
                             <!-- 使用.prevent消除a链接的默认跳转行为 -->
-                            <a class="btn btn-primary" href="" @click.prevent="removePerson(item.id)">delete</a>
+                            <a class="btn btn-primary" href="" @click.prevent="removePerson(i)">delete</a>
                             <!-- 在方法名中有小括号的目的是为了传参数 -->
                         </td>
                     </tr>
@@ -195,7 +195,7 @@
                             alert('please input information sheer');
                         }
                     },
-                    removePerson(id){
+                    removePerson(i){
                         //根据id找到相应的的索引值，然后根据索引值来删除list数组中的对象元素
                         //第一种方法：使用 findIndex() 找到索引
                         /* var index = this.list.findIndex(item => {
@@ -207,12 +207,13 @@
 
                         //第二种方法：使用 some() 找到索引，然后执行删除
                         //some() 功能是当找到符合条件的元素的时候，可以使用 return true; 来终止遍历
-                        this.list.some((item,i) => {
+                        /* this.list.some((item,i) => {
                             if(item.id == id){
                                 this.list.splice(i,1);
                                 return true;
                             }
-                        });
+                        }); */
+                        this.list.splice(i,1);
 
                         //这两种方法效果是一样的
                     },

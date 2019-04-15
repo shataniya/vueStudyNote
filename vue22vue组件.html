@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>vue组件</title>
+        <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script> -->
+        <script src="vue.js"></script>
+    </head>
+    <body>
+
+        <div id="app">
+            <!-- 如果要使用组件，直接把 组建的名称 以 HTML标签 的形式，引入到页面中，即可 -->
+            <my-com1></my-com1>
+            <my-com2></my-com2>
+            <my-com3></my-com3>
+            <my-com4></my-com4>
+            <my-com5></my-com5>
+        </div>
+
+        <!-- 在 vue实例 控制的元素外定义 组件的模板，在 （vue里边定义的）template标签 内部定义组件的模板 -->
+        <template id="temp1">
+            <div>
+                <p>我是一个控制元素外定义组件的 子元素 或者 子标签</p>
+                <p>我是一个控制元素外定义组件的 子元素 或者 子标签</p>
+            </div>
+        </template>
+
+        <script>
+            
+            // 创建组件的第一种方法：
+            // 使用 Vue.extend 来创建全局的 Vue 组件
+            // Vue.extend
+            var com1 = Vue.extend({
+                template:'<h3>这是使用 vue.extend 创建的组件</h3>'       /* 通过 template 属性，指定了组件要展示的 HTML结构 */
+            });
+
+            // 使用 Vue.component('组建的名称',创建出来的模板对象)
+            // 使用 驼峰命名法 的组件，在调用这个组件的时候，名称必须是小写，中间还要有一个小杠“-”，例如：myModel --> my-model
+            Vue.component('myCom1',com1);
+
+            // 个人感悟：组件只有在被 vue实例 调用才会显示出来，否则不会显示出来
+
+
+            // 上面的方法是通过 中间变量com1 来实现创建的，其实可以不使用中间变量
+            Vue.component('myCom2',Vue.extend({
+                template:'<p>这是一个消除中间变量而直接创建的组件</p>'
+            }));
+
+            // Vue.component 
+            // 1.第一个参数是组件名称，将来要使用这个组件的时候，是以 标签的形式 来引入的，记得 如果是驼峰命名法 的话记得引入的是中间使用 “-”
+            // 2.第二个参数是 Vue.extend 创建的组件，其中 template 就是组件将来要展示的 HTML 内容
+
+
+            // 创建组件的第二种方法：
+            // 注意：无论是那种方法创建出来的组件，组件中 template 属性指向的模板内容，都必须有且只有一个根元素
+            Vue.component('myCom3',{
+                template:'<p>这是直接使用 vue.component 创建的组件</p>',
+            });
+            Vue.component('myCom4',{
+                template:'<div><p>这是一个根元素里的一个子元素</p><p>这是一个根元素里的一个子元素</p></div>'
+            });
+
+
+            // 创建组件的第三种方式：
+            // 第二种创建方法的缺点就是，在 template 里写入组件的模板内容，但是没有提示符，这样书写代码效率就比较低，而且很容易出错
+            // 因此，第三种方法就是把 组件的模板 放到 vue实例 控制的元素外面来定义，这样就会有提示词，书写代码效率就会比较高，而且不容易出错
+            Vue.component('myCom5',{
+                template:"#temp1"
+            });
+
+
+
+
+            var vm = new Vue({
+                el:"#app"
+            });
+        
+        
+        </script>
+        
+        <script>
+        
+            // 什么是 vue组件
+            // 组件的出现，就是为了拆分 vue实例的 代码量的，能够让我们以不同的组件，来划分不同的功能模块，将来需要什么样的功能，就可以去调用相应的组件即可
+
+            // 组件化 和 模块化 的不同
+            // 1.模块化 是从 代码逻辑 的角度进行划分的，方便代码分层开发，保证每功能模块的职能单一
+            // 2.组件化 是从 UI界面 的角度进行划分的，方便UI组建的重用
+        
+        </script>
+
+
+    </body>
+</html>

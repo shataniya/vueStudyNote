@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>webpack的引入</title>
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+        <script src="https://unpkg.com/vue-router@3.0.2/dist/vue-router.js"></script>
+    </head>
+    <body>
+
+        <div id="app"></div>
+
+        <template id="template1">
+            <div>
+                <h1>这是登录组件</h1>
+            </div>
+        </template>
+
+
+        <script>
+        
+            var login = {
+                template:"#template1"
+            };
+
+            var vm = new Vue({
+                el:"#app",
+                data:{},
+                methods:{},
+                render: function(creatElements){ // creatElements 是一个方法，调用他，能够把指定的组件模板，渲染为 html 结构
+                    return creatElements(login);
+                    // 注意：这里 return 的结果，会 替换页面中的 el 指定的那个容器
+
+                    // render 和 注册组件的方式 区别：
+                    // 1. render 会完全取代 指定的 el 容器，但是注册组件不会，注册组件只会替换相应的名称标签
+                }
+                
+            });
+            
+
+        
+        </script>
+    </body>
+</html>

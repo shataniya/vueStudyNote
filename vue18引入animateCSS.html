@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>aniamte动画演示</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        <script src="vue.js"></script>
+        <link rel="stylesheet" href="animate.css/animate.css">
+        <style>
+        
+            h2{
+                /* display: block; *//* 把他变成块级元素 */
+                /* width: 100%; */
+                text-align: center;
+                font-size: 80px;
+                font-weight: 100;
+                background: linear-gradient(to left,#ff6700,pink);
+                -webkit-background-clip: text;
+                color: transparent;
+            }
+        
+        </style>
+    </head>
+    <body>
+        <div id="app">
+            <a class="btn btn-primary" href="" @click.prevent="show=!show">点击演示动画</a>
+            
+            <transition enter-active-class="bounceInLeft" leave-active-class="bounceOutLeft">
+            <!-- <transition enter-active-class="bounceInLeft" leave-active-class="bounceOutLeft" :duration="{enter:200,leave:400}"> -->
+                <!-- 记得要添加一个基础类 animated,可以加在 transition 里边，也可以加在 transition内部的元素 里边 -->
+                <!-- 使用 :duration 来统一设置 入场 和 离场 的动画时长 时间单位是 ms -->
+                <!-- 使用 :duration="{enter: , leave: }" 来分别设置 入场 和 离场 的动画时长 -->
+                <h2 v-if="show" class="animated">Animate CSS</h2>
+            </transition>
+        </div>
+
+        <script>
+        
+            var vm = new Vue({
+                el:"#app",
+                data:{
+                    show:false
+                }
+            });
+        
+        </script>
+    </body>
+</html>

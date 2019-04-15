@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>vue获取DOM元素和组件</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <script src="js/jquery-3.3.1.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        <script src="vue.js"></script>
+    </head>
+    <body>
+
+        <div id="app">
+            <button type="button" class="btn btn-primary" @click="getElement" ref="btn">getElement</button>
+            <h1 ref="h1">我是一个h1</h1>
+            <hr>
+            <login ref="mylogin"></login>
+        </div>
+
+        <template id="temp1">
+            <div>
+                <h1>我是组件里的h1</h1>
+            </div>
+        </template>
+
+        <script>
+
+            var login = {
+                template:'#temp1',
+                data(){
+                    return {
+                        msg:'我是组件里的message'
+                    }
+                },
+                methods:{
+                    show(){
+                        console.log('调用了子组件的方法');
+                    }
+                }
+            };
+        
+            var app = new Vue({
+                el:'#app',
+                data:{},
+                methods:{
+                    getElement(){
+
+                        //vue 提供 $refs 来获取DOM元素 在相应的DOM元素里设置 ref属性值，然后 this.$refs.ref属性值 来获取这个DOM元素
+                        //ref 就是 【reference】 的缩写，意思就是引用
+                        //console.log(this.$refs.h1.innerText);
+                        console.log(this.$refs.mylogin.msg);
+                        this.$refs.mylogin.show();
+
+                        //因此，通过ref可以获取组件里定义的 data数据 和 methods方法
+                    }
+                },
+                components:{
+                    login:login
+                }
+            });
+        
+        </script>
+
+
+    </body>
+</html>

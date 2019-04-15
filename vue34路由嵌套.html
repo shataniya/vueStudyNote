@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>vue路由嵌套</title>
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+        <script src="https://unpkg.com/vue-router@3.0.2/dist/vue-router.js"></script>
+    </head>
+    <body>
+        <div id="app">
+
+            <router-link class="btn btn-outline-warning" to="/account">Account</router-link>
+
+
+            <router-view></router-view>
+        </div>
+
+        <template id="temp1">
+            <div>
+                <h1>这是一个 Account 组件</h1>
+
+                <router-link class="btn btn-outline-success" to="/account/login">登录</router-link>
+                <router-link class="btn btn-outline-danger" to="/account/register">注册</router-link>
+                <router-view></router-view>
+            </div>
+        </template>
+
+        <template id="temp2">
+            <div>
+                <h3>我是一个登录组件</h3>
+            </div>
+        </template>
+
+        <template id="temp3">
+            <div>
+                <h3>我是一个注册组件</h3>
+            </div>
+        </template>
+
+
+        <script>
+
+            var account = {
+                template: '#temp1'
+            };
+
+            var login = {
+                template: '#temp2'
+            };
+
+            var register = {
+                template: '#temp3'
+            };
+
+            var routerExp = new VueRouter({
+                routes:[
+                    { 
+                        path: '/account',
+                        component: account,
+
+                        //通过 children 属性来实现路由的嵌套，注意：子路由的 path 前面不要带 /(斜线)
+                        children:[
+                            { path:'login', component: login },
+                            { path:'register', component: register }
+                        ]
+                    }
+                ],
+            });
+        
+            var vm = new Vue({
+                el:'#app',
+                data:{},
+                methods:{},
+                router:routerExp
+            });
+        
+        </script>
+    </body>
+</html>

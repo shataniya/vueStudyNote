@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>computed 计算属性</title>
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+        <script src="https://unpkg.com/vue-router@3.0.2/dist/vue-router.js"></script>
+    </head>
+    <body>
+        <form class="my-2 container" id="app">
+            <div class="form-group row">
+                <div class="col-2">
+                    <input type="text" class="form-control" v-model="content1">
+                </div>
+                <a class="btn btn-primary" href="" @click.prevent>+</a>
+                <div class="col-2">
+                    <input type="text" class="form-control" v-model="content2">
+                </div>
+                <a class="btn btn-primary" href="" @click.prevent>=</a>
+                <div class="col-4">
+                    <input type="text" class="form-control" v-model="content3">
+                </div>
+            </div>
+
+            <p>{{ content3 }}</p>
+        </form>
+
+        <script>
+        
+            var vm = new Vue({
+                el:'#app',
+                data:{
+                    content1:'',
+                    content2:'',
+                },
+                methods:{},
+                computed:{
+                    // 在 computed 中，可以定义一些属性，这些属性，叫做【计算属性】，计算属性的本质，就是一个方法，只不过，我们在使用计算属性的时候，是把他们的
+                    // 名称 当做 属性 来直接使用的，并不会把 计算属性 当做方法去调用
+
+
+                    // 注意1：【计算属性】，在引用的时候，不要加()去使用，直接把他当做普通属性去使用
+
+                    // 注意2：只要 【计算属性】，这个 function 内部，所用到的 任何 data 中的数据发生了变化，就会立即重新计算 这个【计算属性】 属性的值
+
+                    // 注意3：【计算属性】 计算出来的结果会缓存起来，如果 内部的 data 数据没有发生变化的话，那么 【计算属性】的值也不会发生改变
+
+                    // 注意4：【计算属性】本质上是一个函数，不同的是，需要一个返回值，即 需要 return
+                    'content3':function(){
+                        return this.content1+'-'+this.content2;
+                    }
+                }
+
+                // 【computed】，【methods】，【watch】的对比：
+                // 【computed】：计算属性的结果会被缓存，除非内部的 data 数据发生变化才会重新计算，主要是当做 普通属性 来使用
+                // 【methods】：表示一个具体的操作，主要用于业务逻辑
+                // 【watch】：属性名是要观察的表达式，可以是DOM元素，也可以是非DOM元素，属性值是后边的函数【回调函数】，主要用于监听某些特定数据的变化，并进行
+                // 相应的业务逻辑操作，【watch】可以看做是【computed】和【methods】的结合体
+               
+            });
+        
+        </script>
+    </body>
+</html>
